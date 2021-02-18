@@ -1,12 +1,78 @@
-//#include "autocomplete.h"
+#include "autocomplete.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct term{
-    char term[200]; // assume terms are not longer than 200
-    double weight;
-};
+
+void print_term(struct term t) {
+    printf("%s: %f\n", t.term, t.weight);
+}
+
+
+void print_term_array(struct term * t, int num) {
+    for (int i = 0; i < num; i++) {
+        printf("%s: %f\n", t[i].term, t[i].weight);
+    }
+}
+
+
+
+
+
+
+int lex_cmp_func(const void * t1, const void* t2) {
+    return strcmp(((struct term*) t1)->term, ((struct term*) t2)->term);
+}
+
+void read_in_terms(struct term **terms, int *pnterms, char *filename){
+
+/* The function takes in a pointer to a pointer to struct term, a pointer to an 
+ * int, and the name of a file that is formatted like cities.txt. */
+/* The function allocates memory for all the terms in the file and stores a 
+ * pointer to the block in *terms. The function stores the number of terms in *pnterms. 
+ * The function reads in all the terms from filename, and places them in the block pointed to by *terms. */
+    // this should sort terms in lexicographic order
+    
+
+    FILE* fp;
+    int n_cities;
+    int linesize = 200;
+    char line[linesize];
+    char* delim = "	";
+    struct term* term_array;
+
+    fp = fopen(filename, "r");
+    fscanf(fp, "%d", &n_cities);
+
+    term_array = (struct term*) malloc(sizeof(struct term) * n_cities);
+
+    for (int i = 0; i < n_cities; i++) {
+        struct term tt;
+        fgets(line, linesize, fp);
+        char* ptr = strtok(line, delim);
+        int flag = 0;
+        while (ptr) {
+            if (flag == 0) {
+                tt.weight = (double) atoi(ptr);
+                flag = 1;
+            } else {
+                strcpy(tt.term, ptr);
+                flag = 0;
+            }
+            ptr = strtok(NULL, delim);
+        }
+        term_array[i] = tt;
+    }
+
+    qsort(term_array, n_cities, sizeof(struct term), lex_cmp_func);
+
+    terms = &term_array;
+    pnterms = &n_cities;
+
+    /* print_term_array(term_array, n_cities); */
+}
+
+
 
 int lowest_match(struct term *terms, int nterms, char *substr){
      

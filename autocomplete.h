@@ -12,4 +12,10 @@ int lowest_match(struct term *terms, int nterms, char *substr);
 int highest_match(struct term *terms, int nterms, char *substr);
 void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr);
 
+
+void print_term(struct term t);
+
+
+void print_term_array(struct term * t, int num); 
+
 #endif
