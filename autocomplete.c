@@ -11,7 +11,7 @@ void print_term(struct term t) {
 
 void print_term_array(struct term * t, int num) {
     for (int i = 0; i < num; i++) {
-        printf("%s: %f\n", t[i].term, t[i].weight);
+        printf("%s %f\n", t[i].term, t[i].weight);
     }
 }
 
@@ -25,14 +25,6 @@ int lex_cmp_func(const void * t1, const void* t2) {
 }
 
 void read_in_terms(struct term **terms, int *pnterms, char *filename){
-
-/* The function takes in a pointer to a pointer to struct term, a pointer to an 
- * int, and the name of a file that is formatted like cities.txt. */
-/* The function allocates memory for all the terms in the file and stores a 
- * pointer to the block in *terms. The function stores the number of terms in *pnterms. 
- * The function reads in all the terms from filename, and places them in the block pointed to by *terms. */
-    // this should sort terms in lexicographic order
-    
 
     FILE* fp;
     int n_cities;
@@ -66,8 +58,8 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename){
 
     qsort(term_array, n_cities, sizeof(struct term), lex_cmp_func);
 
-    terms = &term_array;
-    pnterms = &n_cities;
+    *terms = term_array;
+    *pnterms = n_cities;
 
     /* print_term_array(term_array, n_cities); */
 }
