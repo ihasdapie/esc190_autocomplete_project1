@@ -47,6 +47,7 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename){
                 tt.weight = (double) atoi(ptr);
                 flag = 1;
             } else {
+                ptr[strcspn(ptr, "\n")] = 0;   // removing "\n"
                 strcpy(tt.term, ptr);
                 flag = 0;
             }
