@@ -149,7 +149,7 @@ void autocomplete(struct term **answer, int *n_answer, struct term *terms,
     int higher_bound = highest_match(terms, nterms, substr);
 
     // n_answer is simply difference between higher_bound and lower_bound
-    *n_answer = higher_bound-lower_bound;
+    *n_answer = higher_bound - lower_bound + 1;
 
     answer_array = (struct term*) malloc(term_size * (*n_answer));
 
