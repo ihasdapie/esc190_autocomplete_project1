@@ -5,7 +5,7 @@ In this project, you will write a fast implementation of the autocomplete functi
 
 You will work with files that contain a large number of terms, along with the importance weight associated with those terms.
 
-The autocomplete task is to quickly retrieve the top 10 terms that match a query string. For example, if the query string is "Eng", you matches might be "English",
+The autocomplete task is to quickly retrieve the top terms that match a query string. For example, if the query string is "Eng", you matches might be "English",
 "Engineering", and "EngSci".
 
 To accomplish the task, you will:
@@ -35,6 +35,8 @@ The function takes in a pointer to a pointer to struct term, a pointer to an int
 
 The function allocates memory for all the terms in the file and stores a pointer to the block in *terms. The function stores the number of terms in *pnterms. The function reads in all the terms from filename, and places them in the block pointed to by *terms.
 
+The terms should be sorted in lexicographic order.
+
 Part 2(a)
 =========
 Write a function with the signature
@@ -63,7 +65,7 @@ Write a function with the signature
 
 void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr);
 
-The function takes terms (assume it is sorted), the number of terms nterms, and the query string substr, and places the answers in answer, with *n_answer being the number of answers.
+The function takes terms (assume it is sorted lexicographically), the number of terms nterms, and the query string substr, and places the answers in answer, with *n_answer being the number of answers. The answer should be sorted by weight.
 
 
 Reading in files

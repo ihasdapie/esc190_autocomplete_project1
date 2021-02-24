@@ -16,14 +16,13 @@ void print_term_array(struct term * t, int num) {
 }
 
 
-
-
-
-
 int lex_cmp_func(const void * t1, const void* t2) {
     return strcmp(((struct term*) t1)->term, ((struct term*) t2)->term);
 }
 
+int weight_cmp_func(const void * t1, const void* t2) {
+    return ((struct term*) t1)->weight < ((struct term*) t2)->weight;
+}
 void read_in_terms(struct term **terms, int *pnterms, char *filename){
 
     FILE* fp;
@@ -99,8 +98,6 @@ int lowest_match(struct term *terms, int nterms, char *substr){
 }
 
 int highest_match(struct term *terms, int nterms, char *substr){
-
-         
     int low = 0;
     int high = nterms - 1;
     int res = -1;
@@ -130,3 +127,46 @@ int highest_match(struct term *terms, int nterms, char *substr){
     }
     return res;         
 }
+
+
+void autocomplete(struct term **answer, int *n_answer, struct term *terms,
+        int nterms, char *substr){
+    // The function takes terms (assume it is sorted lexicographically), the number of terms nterms, and the 
+    // query string substr, and places the answers in answer, with *n_answer being the number of answers. The answer should be sorted by weight.
+
+    
+    // we want to know the range where our answers can be
+    // get high and lowest bound
+    // because the items are sorted lexicographically, all items between
+    // lower_bound and higher_bound all match
+    
+    struct term * answer_array = NULL;
+    size_t term_size = sizeof(struct term);
+
+
+    int lower_bound = lowest_match(terms, nterms, substr);
+    int higher_bound = highest_match(terms, nterms, substr);
+
+    // n_answer is simply difference between higher_bound and lower_bound
+    *n_answer = higher_bound-lower_bound;
+
+    answer_array = (struct term*) malloc(term_size * (*n_answer));
+
+    // construct term array since in answer_array
+    memcpy(answer_array, &terms[lower_bound] , (*n_answer)*term_size);
+    qsort(answer_array, *n_answer, sizeof(struct term), weight_cmp_func);
+
+    // set variables as required
+    *answer = answer_array;
+
+
+}
+
+
+
+
+
+
+
+
+
