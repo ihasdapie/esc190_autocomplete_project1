@@ -26,25 +26,31 @@ int weight_cmp_func(const void * t1, const void* t2) {
 void read_in_terms(struct term **terms, int *pnterms, char *filename){
 
     FILE* fp;
-    int n_cities;
+    int f_nterms;
     int linesize = 200;
     char line[linesize];
     char* delim = "	";
     struct term* term_array;
 
     fp = fopen(filename, "r");
-    fscanf(fp, "%d", &n_cities);
 
-    term_array = (struct term*) malloc(sizeof(struct term) * n_cities);
+    fgets(line, linesize, fp);
+    f_nterms = atof(line);
 
-    for (int i = 0; i < n_cities; i++) {
+
+
+    /* fscanf(fp, "%d", &f_nterms); */
+
+    term_array = (struct term*) malloc(sizeof(struct term) * f_nterms);
+
+    for (int i = 0; i < f_nterms; i++) {
         struct term tt;
         fgets(line, linesize, fp);
         char* ptr = strtok(line, delim);
         int flag = 0;
         while (ptr) {
             if (flag == 0) {
-                tt.weight = (double) atoi(ptr);
+                tt.weight = atof(ptr);
                 flag = 1;
             } else {
                 ptr[strcspn(ptr, "\n")] = 0;   // removing "\n"
@@ -56,12 +62,12 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename){
         term_array[i] = tt;
     }
 
-    qsort(term_array, n_cities, sizeof(struct term), lex_cmp_func);
+    qsort(term_array, f_nterms, sizeof(struct term), lex_cmp_func);
 
     *terms = term_array;
-    *pnterms = n_cities;
+    *pnterms = f_nterms;
 
-    /* print_term_array(term_array, n_cities); */
+    /* print_term_array(term_array, f_nterms); */
 }
 
 
@@ -130,6 +136,8 @@ int highest_match(struct term *terms, int nterms, char *substr){
 }
 
 
+
+
 void autocomplete(struct term **answer, int *n_answer, struct term *terms,
         int nterms, char *substr){
     // The function takes terms (assume it is sorted lexicographically), the number of terms nterms, and the 
@@ -148,21 +156,22 @@ void autocomplete(struct term **answer, int *n_answer, struct term *terms,
     int lower_bound = lowest_match(terms, nterms, substr);
     int higher_bound = highest_match(terms, nterms, substr);
 
+
+
     // n_answer is simply difference between higher_bound and lower_bound
-    *n_answer = higher_bound - lower_bound + 1;
+    *n_answer = higher_bound-lower_bound+1;
 
     answer_array = (struct term*) malloc(term_size * (*n_answer));
 
     // construct term array since in answer_array
     memcpy(answer_array, &terms[lower_bound] , (*n_answer)*term_size);
-    qsort(answer_array, *n_answer, sizeof(struct term), weight_cmp_func);
+    qsort(answer_array, *n_answer, sizeof(struct term), lex_cmp_func);
 
     // set variables as required
     *answer = answer_array;
 
 
 }
-
 
 
 
