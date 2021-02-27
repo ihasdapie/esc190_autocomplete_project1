@@ -157,20 +157,29 @@ void autocomplete(struct term **answer, int *n_answer, struct term *terms,
     int higher_bound = highest_match(terms, nterms, substr);
 
 
+    if (lower_bound != -1){
+        // n_answer is simply difference between higher_bound and lower_bound + 1
+        *n_answer = higher_bound - lower_bound + 1;
 
-    // n_answer is simply difference between higher_bound and lower_bound
-    *n_answer = higher_bound-lower_bound+1;
+        answer_array = (struct term*) malloc(term_size * (*n_answer));
 
-    answer_array = (struct term*) malloc(term_size * (*n_answer));
+        // construct term array since in answer_array
+        memcpy(answer_array, &terms[lower_bound] , (*n_answer)*term_size);
+        qsort(answer_array, *n_answer, sizeof(struct term), weight_cmp_func);
 
-    // construct term array since in answer_array
-    memcpy(answer_array, &terms[lower_bound] , (*n_answer)*term_size);
-    qsort(answer_array, *n_answer, sizeof(struct term), lex_cmp_func);
+        // set variables as required
+        *answer = answer_array;
+    }
+    else if (lower_bound == -1){
+        // no match, so answer is 0
+        *n_answer = 0;
 
-    // set variables as required
-    *answer = answer_array;
+        //creates a empty array
+        answer_array = NULL;
 
-
+        // set variables as required
+        *answer = answer_array;
+    }
 }
 
 
