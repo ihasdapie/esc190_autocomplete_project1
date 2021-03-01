@@ -4,16 +4,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-void print_term(struct term t) {
-    printf("%s: %f\n", t.term, t.weight);
-}
+/* void print_term(struct term t) { */
+/*     printf("%s: %f\n", t.term, t.weight); */
+/* } */
 
 
-void print_term_array(struct term * t, int num) {
-    for (int i = 0; i < num; i++) {
-        printf("%s %f\n", t[i].term, t[i].weight);
-    }
-}
+/* void print_term_array(struct term * t, int num) { */
+/*     for (int i = 0; i < num; i++) { */
+/*         printf("%s %f\n", t[i].term, t[i].weight); */
+/*     } */
+/* } */
 
 int lex_cmp_func(const void * t1, const void* t2) {
     return strcmp(((struct term*) t1)->term, ((struct term*) t2)->term);
@@ -72,7 +72,6 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename){
 
 
 int lowest_match(struct term *terms, int nterms, char *substr){
-     
     int low = 0;
     int high = nterms - 1;
     int res = -1;
@@ -162,37 +161,35 @@ void autocomplete(struct term **answer, int *n_answer, struct term *terms,
     // because the items are sorted lexicographically, all items between
     // lower_bound and higher_bound all match
     
-    struct term * answer_array = NULL;
+    struct term* answer_array = NULL;
     size_t term_size = sizeof(struct term);
-
 
     int lower_bound = lowest_match(terms, nterms, substr);
     int higher_bound = highest_match(terms, nterms, substr);
 
 
-    if (lower_bound != -1){
+
+    if (lower_bound == -1) {
+        // handle no match case
+        // if no match, both lower_bound and upper_bound = -1
+        // answer_array is already NULL; no need to set to NULL again
+
+        // set variables as required
+        *n_answer = 0; // no match <=> 0 answers
+    } else {
         // n_answer is simply difference between higher_bound and lower_bound + 1
         *n_answer = higher_bound - lower_bound + 1;
 
+        // construct answer array as term array slice
         answer_array = (struct term*) malloc(term_size * (*n_answer));
-
-        // construct term array since in answer_array
         memcpy(answer_array, &terms[lower_bound] , (*n_answer)*term_size);
+
+        // sort as per term weight
         qsort(answer_array, *n_answer, sizeof(struct term), weight_cmp_func);
-
-        // set variables as required
-        *answer = answer_array;
     }
-    else if (lower_bound == -1){
-        // no match, so answer is 0
-        *n_answer = 0;
 
-        //creates a empty array
-        answer_array = NULL;
-
-        // set variables as required
-        *answer = answer_array;
-    }
+    // set variables as required
+    *answer = answer_array;
 }
 
 
