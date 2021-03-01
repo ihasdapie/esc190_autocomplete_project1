@@ -84,8 +84,14 @@ int lowest_match(struct term *terms, int nterms, char *substr){
         // Normal Binary Search Logic 
         int mid = (low + high) / 2;
         
-        char test_string[sub_length + 1];
-        strncpy(test_string, terms[mid].term, sub_length);
+        char test_string [sub_length + 1];
+        int i = 0;
+        while ((terms[mid].term[i] != '\0') && (i < sub_length)){
+            test_string[i] = terms[mid].term[i];
+            i++;
+        }
+        test_string[i] = '\0';
+
         int result = strcmp(test_string, substr);
 
         if (result > 0){
@@ -104,6 +110,8 @@ int lowest_match(struct term *terms, int nterms, char *substr){
 }
 
 int highest_match(struct term *terms, int nterms, char *substr){
+
+         
     int low = 0;
     int high = nterms - 1;
     int res = -1;
@@ -114,10 +122,16 @@ int highest_match(struct term *terms, int nterms, char *substr){
         // Normal Binary Search Logic 
         int mid = (low + high) / 2;
         
-        char test_string[sub_length + 1];
-        strncpy(test_string, terms[mid].term, sub_length);
+        char test_string [sub_length + 1];
+        int i = 0;
+        while ((terms[mid].term[i] != '\0') && (i < sub_length)){
+            test_string[i] = terms[mid].term[i];
+            i++;
+        }
+        test_string[i] = '\0';
 
         int result = strcmp(test_string, substr);
+
 
         if (result > 0){
             high = mid - 1;
