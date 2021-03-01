@@ -1,6 +1,9 @@
 #if !defined(AUTOCOMPLETE_H)
 #define AUTOCOMPLETE_H
 
+
+#include "stdio.h"
+
 struct term{
     char term[200]; // assume terms are not longer than 200
     double weight;

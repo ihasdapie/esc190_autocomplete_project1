@@ -1,8 +1,8 @@
 #include "autocomplete.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 void print_term(struct term t) {
     printf("%s: %f\n", t.term, t.weight);
@@ -14,7 +14,6 @@ void print_term_array(struct term * t, int num) {
         printf("%s %f\n", t[i].term, t[i].weight);
     }
 }
-
 
 int lex_cmp_func(const void * t1, const void* t2) {
     return strcmp(((struct term*) t1)->term, ((struct term*) t2)->term);
