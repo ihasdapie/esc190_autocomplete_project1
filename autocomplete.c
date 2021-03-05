@@ -20,7 +20,7 @@ int lex_cmp_func(const void * t1, const void* t2) {
 }
 
 int weight_cmp_func(const void * t1, const void* t2) {
-    return ((struct term*) t1)->weight < ((struct term*) t2)->weight;
+    return ((int)((struct term*) t2)->weight - (int)((struct term*) t1)->weight );
 }
 void read_in_terms(struct term **terms, int *pnterms, char *filename){
 
